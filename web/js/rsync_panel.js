@@ -4,13 +4,27 @@ import { api } from "../../scripts/api.js";
 // Add File Transfer Panel to ComfyUI
 app.registerExtension({
     name: "Comfy.FileTransferPanel",
+    // Define the command to show the file transfer panel
+    commands: [
+        {
+            id: "show-file-transfer",
+            label: "Show File Transfer Panel",
+            function: () => {
+                const panel = document.getElementById("file-transfer-panel");
+                if (panel) {
+                    panel.style.display = panel.style.display === "none" ? "block" : "none";
+                }
+            }
+        }
+    ],
+    // Add the command to the menu
+    menuCommands: [
+        {
+            path: ["Extensions", "File Transfer"],
+            commands: ["show-file-transfer"]
+        }
+    ],
     async setup() {
-        // Create panel menu entry
-        const menuEntry = document.createElement("li");
-        menuEntry.innerHTML = '<a href="#"><i class="fas fa-exchange-alt"></i> File Transfer</a>';
-        const menu = document.querySelector(".comfy-menu");
-        const menuList = menu.querySelector("ul");
-        menuList.appendChild(menuEntry);
 
         // Create file transfer panel
         const panel = document.createElement("div");
@@ -228,11 +242,8 @@ app.registerExtension({
             });
         });
 
-        // Event listeners
-        menuEntry.addEventListener("click", (e) => {
-            e.preventDefault();
-            panel.style.display = panel.style.display === "none" ? "block" : "none";
-        });
+        // Event listeners for close button only
+        // Menu click is handled by the command function above
 
         document.getElementById("transfer-close").addEventListener("click", () => {
             panel.style.display = "none";
