@@ -4,7 +4,7 @@ import { api } from "../../scripts/api.js";
 // Add File Transfer Panel to ComfyUI as a sidebar tab
 app.registerExtension({
     name: "Comfy.FileTransferPanel",
-    
+
     async setup() {
         // Create styles for the sidebar tab
         const style = document.createElement("style");
@@ -113,7 +113,7 @@ app.registerExtension({
                 // Create the container for the sidebar tab content
                 const container = document.createElement("div");
                 container.className = "comfy-modal-content file-transfer-sidebar";
-                
+
                 // Create tab structure
                 container.innerHTML = `
                     <div class="sidebar-tabs">
@@ -204,7 +204,7 @@ app.registerExtension({
                         </div>
                     </div>
                 `;
-                
+
                 // Tab switching functionality
                 const tabButtons = container.querySelectorAll(".sidebar-tab-button");
                 tabButtons.forEach(button => {
