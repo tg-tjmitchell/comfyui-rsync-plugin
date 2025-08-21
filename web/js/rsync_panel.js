@@ -105,11 +105,14 @@ app.registerExtension({
         `;
         document.head.appendChild(style);
 
-        // Register the sidebar tab
-        app.ui.settings.addSetting({
-            id: "comfy.file_transfer_tab",
-            name: "💾 File Transfer",
-            type: (name, setter, value) => {
+        // Register the sidebar tab using the official Sidebar Tabs API
+        app.extensionManager.registerSidebarTab({
+            id: "fileTransfer",
+            icon: "pi pi-upload",
+            title: "File Transfer",
+            tooltip: "Rsync and Rclone utilities",
+            type: "custom",
+            render: (el) => {
                 // Create the container for the sidebar tab content
                 const container = document.createElement("div");
                 container.className = "comfy-modal-content file-transfer-sidebar";
@@ -168,7 +171,7 @@ app.registerExtension({
                                     <label for="rclone-destination">Destination Path:</label>
                                     <input type="text" id="rclone-destination" placeholder="Local path or remote:path">
                                 </div>
-                                <div class="form-group">
+                                    <div class="form-group">
                                     <label for="rclone-config">Config File Path (Optional):</label>
                                     <input type="text" id="rclone-config" placeholder="Path to rclone.conf">
                                 </div>
@@ -323,8 +326,14 @@ app.registerExtension({
                     }
                 });
 
-                return container;
-            },
+                // Append to the sidebar tab element
+                el.appendChild(container);
+
+                // Optional cleanup when the tab is destroyed
+                return () => {
+                    // No persistent listeners outside container
+                };
+            }
         });
 
         // No need for the old extension menu items since we're using a sidebar tab now
