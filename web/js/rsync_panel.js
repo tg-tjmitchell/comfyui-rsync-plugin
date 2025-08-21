@@ -2,29 +2,91 @@ import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
 
 // Add File Transfer Panel to ComfyUI
+// Note: We no longer use this extension object, it's just kept for clarity
+const extension = {
+    name: "Comfy.FileTransferPanel"
+};
+
+// Create and add the button to the UI
+const createButton = ({ text, tooltip }) => {
+    const button = document.createElement('button');
+    button.className = 'comfyui-button comfyui-menu-mobile-collapse';
+    button.setAttribute('aria-label', tooltip);
+    button.title = tooltip;
+
+    // Add icon
+    const iconContainer = document.createElement('span');
+    iconContainer.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>
+        </svg>
+    `;
+    iconContainer.style.display = 'flex';
+    iconContainer.style.alignItems = 'center';
+    iconContainer.style.justifyContent = 'center';
+    iconContainer.style.width = '20px';
+    iconContainer.style.height = '16px';
+    button.appendChild(iconContainer);
+
+    // Add text
+    const textNode = document.createTextNode(' ' + text);
+    button.appendChild(textNode);
+
+    return button;
+};
+
+// Add the button to the menu
+const addButton = (selector, callback) => {
+    const observer = new MutationObserver((mutations, obs) => {
+        const element = document.querySelector(selector);
+        if (element) {
+            callback(element);
+            obs.disconnect();
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+};
+
+// Add button to the right side of the menu
+const addButtonToMenuRight = (menuRight) => {
+    let buttonGroup = menuRight.querySelector('.comfyui-button-group');
+
+    if (!buttonGroup) {
+        buttonGroup = document.createElement('div');
+        buttonGroup.className = 'comfyui-button-group';
+        menuRight.appendChild(buttonGroup);
+    }
+
+    const fileTransferButton = createButton({
+        text: 'Transfer',
+        tooltip: 'Open File Transfer Panel'
+    });
+
+    buttonGroup.appendChild(fileTransferButton);
+
+    // Add click event to open panel
+    fileTransferButton.addEventListener('click', () => {
+        const panel = document.getElementById("file-transfer-panel");
+        if (panel) {
+            panel.style.display = panel.style.display === "none" ? "block" : "none";
+        }
+    });
+};
+
+// Initialize button when the UI loads
+const initializeButton = () => {
+    addButton('.comfyui-menu-right', addButtonToMenuRight);
+};
+
+// Initialize the UI component
+initializeButton();
+
+// Register the extension with setup function
 app.registerExtension({
-    name: "Comfy.FileTransferPanel",
-    // Define the command to show the file transfer panel
-    commands: [
-        {
-            id: "show-file-transfer",
-            label: "Show File Transfer Panel",
-            function: () => {
-                const panel = document.getElementById("file-transfer-panel");
-                if (panel) {
-                    panel.style.display = panel.style.display === "none" ? "block" : "none";
-                }
-            }
-        }
-    ],
-    // Add the command to the menu
-    menuCommands: [
-        {
-            path: ["Extensions", "File Transfer"],
-            commands: ["show-file-transfer"]
-        }
-    ],
+    name: "Comfy.FileTransferPanelUI",
     async setup() {
+
 
         // Create file transfer panel
         const panel = document.createElement("div");
