@@ -330,7 +330,28 @@ if COMFYUI_AVAILABLE:
         """Return list of JavaScript files to include in ComfyUI."""
         return ["js/rsync_panel.js"]  # We kept the same file name for compatibility
 
-    print("ComfyUI Rsync Plugin: UI Panel registered successfully")
+    print("ComfyUI File Transfer Plugin: UI Panel registered successfully")
+    
+    # Define a minimal placeholder node that won't actually be used in workflows
+    # This is just to satisfy ComfyUI's node discovery mechanism
+    class FileTransferHelperNode:
+        """Placeholder node to ensure plugin loading."""
+        @classmethod
+        def INPUT_TYPES(cls):
+            return {"required": {}}
+        
+        RETURN_TYPES = ()
+        FUNCTION = "noop"
+        CATEGORY = "hidden"
+        
+        def noop(self):
+            return {}
+    
+    # Node class mapping to satisfy ComfyUI's custom_nodes loader
+    NODE_CLASS_MAPPINGS = {
+        "FileTransferHelperNode": FileTransferHelperNode
+    }
+    NODE_DISPLAY_NAME_MAPPINGS = {}
 
 if __name__ == "__main__":
     # Simple CLI for quick tests

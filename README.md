@@ -24,6 +24,8 @@ Lightweight helper for using `rsync` and `rclone` from ComfyUI with a dedicated 
 3. Restart ComfyUI.
 4. A new "File Transfer" menu item will appear in the ComfyUI menu.
 
+> **Note:** If you see a "Skip module for custom nodes" error on startup, you can safely ignore it. The plugin should still work correctly. This occurs because ComfyUI expects every plugin to define workflow nodes, but this plugin focuses on providing a UI panel rather than workflow nodes.
+
 ## Using the File Transfer UI Panel
 
 1. Click on the "File Transfer" menu item in the ComfyUI menu.
