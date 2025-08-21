@@ -220,7 +220,7 @@ app.registerExtension({
                 // Deactivate all tabs
                 tabButtons.forEach(btn => btn.classList.remove("active"));
                 panel.querySelectorAll(".tab-pane").forEach(pane => pane.classList.remove("active"));
-                
+
                 // Activate the clicked tab
                 button.classList.add("active");
                 const tabId = button.dataset.tab;
@@ -242,7 +242,7 @@ app.registerExtension({
         document.getElementById("rsync-run").addEventListener("click", async () => {
             const runBtn = document.getElementById("rsync-run");
             const outputArea = document.getElementById("transfer-output");
-            
+
             // Gather form data
             const params = {
                 source: document.getElementById("rsync-source").value,
@@ -274,7 +274,7 @@ app.registerExtension({
 
                 const result = await response.json();
                 outputArea.textContent = result.output || "No output returned";
-                
+
                 if (result.success) {
                     outputArea.style.color = "#8bff87";  // Green for success
                 } else {
@@ -288,12 +288,12 @@ app.registerExtension({
                 runBtn.textContent = "Run Rsync";
             }
         });
-        
+
         // Rclone run handler
         document.getElementById("rclone-run").addEventListener("click", async () => {
             const runBtn = document.getElementById("rclone-run");
             const outputArea = document.getElementById("transfer-output");
-            
+
             // Gather form data
             const params = {
                 source: document.getElementById("rclone-source").value,
@@ -326,7 +326,7 @@ app.registerExtension({
 
                 const result = await response.json();
                 outputArea.textContent = result.output || "No output returned";
-                
+
                 if (result.success) {
                     outputArea.style.color = "#8bff87";  // Green for success
                 } else {
