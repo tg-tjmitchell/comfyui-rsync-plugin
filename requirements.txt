@@ -1,1 +1,3 @@
-# No Python runtime dependencies required by default. rsync must be installed on the system.
+# ComfyUI should provide aiohttp, but if using standalone:
+aiohttp>=3.8.0
+# rsync must be installed on the system separately
