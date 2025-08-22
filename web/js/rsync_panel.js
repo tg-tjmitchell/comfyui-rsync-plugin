@@ -1,5 +1,8 @@
-import { app } from "../../scripts/app.js";
-import { api } from "../../scripts/api.js";
+// Load ComfyUI core modules from absolute paths
+import { app } from "/scripts/app.js";
+import { api } from "/scripts/api.js";
+
+console.log("[comfyui-rsync-plugin] rsync_panel.js loaded");
 
 // Add File Transfer Panel to ComfyUI as a sidebar tab
 app.registerExtension({
