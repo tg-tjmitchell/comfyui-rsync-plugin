@@ -320,17 +320,33 @@ if COMFYUI_AVAILABLE:
                 "output": f"Server error: {str(e)}"
             })
     
-    # Register extension web UI directory
+    # --- Web UI registration (multi-version compatibility) ---
+    _WEB_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "web")
+
+    # Newer API (ComfyUI >= ~1.21): map name -> dir
     def get_extension_web_dirs():
-        """Register the web directory for the UI components."""
-        return {"rsync_plugin": os.path.join(os.path.dirname(os.path.realpath(__file__)), "web")}
+        """Return mapping of extension key to static web directory."""
+        return {"rsync_plugin": _WEB_DIR}
 
-    # Register extension files to load
+    # Newer API: list of JS files relative to the provided web dir
     def get_js_web_extensions():
-        """Return list of JavaScript files to include in ComfyUI."""
-        return ["js/rsync_panel.js"]  # We kept the same file name for compatibility
+        """Return list of JS files to include from the extension web dir."""
+        return ["js/rsync_panel.js"]
 
-    print("ComfyUI File Transfer Plugin: UI Panel registered successfully")
+    # Legacy compatibility: some builds look for a WEB_DIRECTORY string
+    WEB_DIRECTORY = "web"
+
+    # Legacy compatibility: generic getters some plugins expose
+    def get_web_directory():
+        return _WEB_DIR
+
+    def get_js_extensions():
+        return ["js/rsync_panel.js"]
+
+    def get_js_extension():
+        return ["js/rsync_panel.js"]
+
+    print("ComfyUI File Transfer Plugin: UI Panel registered successfully (web assets ready)")
     
     # Define a minimal placeholder node that won't actually be used in workflows
     # This is just to satisfy ComfyUI's node discovery mechanism
