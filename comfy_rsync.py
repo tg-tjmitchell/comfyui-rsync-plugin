@@ -346,6 +346,19 @@ if COMFYUI_AVAILABLE:
     def get_js_extension():
         return ["js/rsync_panel.js"]
 
+    # Force-mount static route as a robust fallback across ComfyUI builds
+    try:
+        if os.path.isdir(_WEB_DIR):
+            server.PromptServer.instance.app.add_routes([
+                web.static('/extensions/rsync_plugin/', _WEB_DIR)
+            ])
+            print(f"ComfyUI File Transfer Plugin: static mounted /extensions/rsync_plugin/ -> {_WEB_DIR}")
+        else:
+            print(f"ComfyUI File Transfer Plugin: web dir not found at {_WEB_DIR}")
+    except Exception as e:
+        # If already mounted or API differs, ignore; extension may still work via registry
+        print(f"ComfyUI File Transfer Plugin: static mount skipped ({e})")
+
     print("ComfyUI File Transfer Plugin: UI Panel registered successfully (web assets ready)")
     
     # Define a minimal placeholder node that won't actually be used in workflows
